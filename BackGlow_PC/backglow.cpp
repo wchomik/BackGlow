@@ -12,6 +12,7 @@ BackGlow::BackGlow(const char * port)
     if (ScreenData)
         free(ScreenData);
     ScreenData = (BYTE*)malloc(4 * ScreenX * ScreenY);
+    memset(ScreenData, 0, 4 * ScreenX * ScreenY);
 
     SP = new Serial(port);
     if (SP->isReady()) {
@@ -47,13 +48,10 @@ void BackGlow::process()
     if(!tableDone){
         for(int i = 0; i < 256; ++i){
             gammaTable[i] = pow(i / 256.0f, 2.2f) * 256;
-            /*gammaTable[i] = i / 256.0f;
-            gammaTable[i] = gammaTable[i] < 0.04045 ?
-                                gammaTable[i] / 12.92f :
-                                powf((gammaTable[i] + 0.055) / 1.055, 2.4f);*/
         }
         tableDone = true;
     }
+
     HBITMAP hBitmap = CreateCompatibleBitmap(hdcScreen, ScreenX, ScreenY);
     HGDIOBJ hOld    = SelectObject(hdcMem, hBitmap);
     BitBlt(hdcMem, 0, 0, ScreenX, ScreenY, hdcScreen, 0, 0, SRCCOPY);

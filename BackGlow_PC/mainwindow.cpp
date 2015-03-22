@@ -18,9 +18,11 @@ MainWindow::MainWindow(QWidget *parent) :
                     );
     }
 
+    synchUIelements();
     readSettings();
 
     timer = new QTimer(this);
+    timer->setTimerType(Qt::PreciseTimer);
     timer->setInterval(33);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     connect(MainWindow::ui->runPushButton, SIGNAL(clicked()), this, SLOT(engage()));
@@ -36,8 +38,29 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::synchUIelements() {
+    connect(MainWindow::ui->fpsSpinBox, SIGNAL(valueChanged(int)),MainWindow::ui->fpsSlider,SLOT(setValue(int)) );
+    connect(MainWindow::ui->fpsSlider,SIGNAL(valueChanged(int)),MainWindow::ui->fpsSpinBox,SLOT(setValue(int)) );
+
+    connect(MainWindow::ui->depthSpinBox, SIGNAL(valueChanged(int)),MainWindow::ui->depthSlider,SLOT(setValue(int)) );
+    connect(MainWindow::ui->depthSlider,SIGNAL(valueChanged(int)),MainWindow::ui->depthSpinBox,SLOT(setValue(int)) );
+
+    connect(MainWindow::ui->brightnessSpinBox, SIGNAL(valueChanged(int)),MainWindow::ui->brightnessSlider,SLOT(setValue(int)) );
+    connect(MainWindow::ui->brightnessSlider,SIGNAL(valueChanged(int)),MainWindow::ui->brightnessSpinBox,SLOT(setValue(int)) );
+
+    connect(MainWindow::ui->redSpinBox, SIGNAL(valueChanged(int)),MainWindow::ui->redSlider,SLOT(setValue(int)) );
+    connect(MainWindow::ui->redSlider,SIGNAL(valueChanged(int)),MainWindow::ui->redSpinBox,SLOT(setValue(int)) );
+
+    connect(MainWindow::ui->greenSpinBox, SIGNAL(valueChanged(int)),MainWindow::ui->greenSlider,SLOT(setValue(int)) );
+    connect(MainWindow::ui->greenSlider,SIGNAL(valueChanged(int)),MainWindow::ui->greenSpinBox,SLOT(setValue(int)) );
+
+    connect(MainWindow::ui->blueSpinBox, SIGNAL(valueChanged(int)),MainWindow::ui->blueSlider,SLOT(setValue(int)) );
+    connect(MainWindow::ui->blueSlider,SIGNAL(valueChanged(int)),MainWindow::ui->blueSpinBox,SLOT(setValue(int)) );
+}
+
 void MainWindow::readSettings() {
     QSettings settings("WiktorChomik", "BackGlow");
+    MainWindow::ui->fpsSlider->setValue(settings.value("fps",30).toInt());
     MainWindow::ui->brightnessSlider->setValue(settings.value("brightnes",1000).toInt());
     MainWindow::ui->redSlider->setValue(settings.value("redIntensity",1000).toInt());
     MainWindow::ui->greenSlider->setValue(settings.value("greenIntensity",1000).toInt());
@@ -47,6 +70,7 @@ void MainWindow::readSettings() {
 
 void MainWindow::saveSettings() {
     QSettings settings("WiktorChomik", "BackGlow");
+    settings.setValue("fps",            MainWindow::ui->fpsSlider->value());
     settings.setValue("brightnes",      MainWindow::ui->brightnessSlider->value());
     settings.setValue("redIntensity",   MainWindow::ui->redSlider->value());
     settings.setValue("greenIntensity", MainWindow::ui->greenSlider->value());
@@ -76,13 +100,18 @@ void MainWindow::update()
     if(!running)
         return;
 
-    int this_time = time.elapsed();
-    if(this_time != last_time) {
-        MainWindow::ui->counterLcdNumber->display(1000/(this_time - last_time));
+    if(frames == 10) {
+        frames = 0;
+        int this_time = time.elapsed();
+        if(this_time != last_time) {
+            MainWindow::ui->counterLcdNumber->display(10000/(this_time - last_time));
+        } else {
+            MainWindow::ui->counterLcdNumber->display(-1);
+        }
+        last_time = this_time;
     } else {
-        MainWindow::ui->counterLcdNumber->display(-1);
+        frames++;
     }
-    last_time = this_time;
 
     if(ambipixel) {
         ambipixel->brightnes      = MainWindow::ui->brightnessSlider->value() / 1000.0f;
@@ -91,6 +120,6 @@ void MainWindow::update()
         ambipixel->blueIntensity  = MainWindow::ui->blueSlider->value() / 1000.0f;
         ambipixel->depth          = MainWindow::ui->depthSlider->value();
         ambipixel->process();
+        timer->setInterval(1000 / MainWindow::ui->fpsSlider->value());
     }
-    //MainForm::ui->text1->setText(...)
 }

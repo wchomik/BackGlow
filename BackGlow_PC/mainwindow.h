@@ -26,6 +26,7 @@ public slots:
 private:
     void readSettings();
     void saveSettings();
+    void synchUIelements();
 
     Ui::MainWindow *ui;
 
@@ -36,6 +37,7 @@ private:
     QTimer *timer;
     QTime   time;
     int     last_time = 0;
+    int     frames    = 0;
 };
 
 #endif // MAINWINDOW_H
