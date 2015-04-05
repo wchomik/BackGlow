@@ -2,8 +2,8 @@
 
 Serial::Serial(const char *portName)
 {
-    this->connected = false;
-    this->serialHandle   = CreateFile(reinterpret_cast<LPCWSTR>(portName),
+    this->connected    = false;
+    this->serialHandle = CreateFile(reinterpret_cast<LPCWSTR>(portName),
         GENERIC_READ | GENERIC_WRITE,
         0,
         NULL,
@@ -26,7 +26,6 @@ Serial::Serial(const char *portName)
             commSettings.BaudRate = CBR_9600;
             commSettings.ByteSize = 8;
             commSettings.StopBits = ONESTOPBIT;
-            //commSettings.Parity   = NOPARITY;
 
             if (!SetCommState(serialHandle, &commSettings)) {
                 printf("Could not change communictaion settings!\n");
