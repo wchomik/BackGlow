@@ -31,7 +31,7 @@ private:
     Ui::MainWindow *ui;
 
     QList<QSerialPortInfo> list;
-    BackGlow *ambipixel = nullptr;
+    BackGlow *m_BackGlow = nullptr;
 
     bool running = false;
     QTimer *timer;

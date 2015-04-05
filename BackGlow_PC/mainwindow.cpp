@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete timer;
-    if(ambipixel) delete ambipixel;
+    if(m_BackGlow) delete m_BackGlow;
     saveSettings();
     delete ui;
 }
@@ -80,17 +80,20 @@ void MainWindow::saveSettings() {
 
 void MainWindow::engage() {
     if(running) {
-        if(ambipixel) {
-            delete ambipixel;
-            ambipixel = nullptr;
+        if(m_BackGlow) {
+            delete m_BackGlow;
+            m_BackGlow = nullptr;
         }
+        MainWindow::ui->runPushButton->setText("Engage");
     } else {
         int index = MainWindow::ui->portsComboBox->currentIndex();
         if(index < 0) {
             qDebug() << "Unknown serial port!";
             return;
         }
-        ambipixel = new BackGlow((const char *)(list[index].portName().utf16()));
+        m_BackGlow = new BackGlow((const char *)(list[index].portName().utf16()));
+
+        MainWindow::ui->runPushButton->setText("Disengage");
     }
     running = !running;
 }
@@ -113,13 +116,13 @@ void MainWindow::update()
         frames++;
     }
 
-    if(ambipixel) {
-        ambipixel->m_brightnes      = MainWindow::ui->brightnessSlider->value() / 1000.0f;
-        ambipixel->m_redIntensity   = MainWindow::ui->redSlider->value() / 1000.0f;
-        ambipixel->m_greenIntensity = MainWindow::ui->greenSlider->value() / 1000.0f;
-        ambipixel->m_blueIntensity  = MainWindow::ui->blueSlider->value() / 1000.0f;
-        ambipixel->m_depth          = MainWindow::ui->depthSlider->value();
-        ambipixel->process();
+    if(m_BackGlow) {
+        m_BackGlow->m_brightnes      = MainWindow::ui->brightnessSlider->value() / 1000.0f;
+        m_BackGlow->m_redIntensity   = MainWindow::ui->redSlider->value() / 1000.0f;
+        m_BackGlow->m_greenIntensity = MainWindow::ui->greenSlider->value() / 1000.0f;
+        m_BackGlow->m_blueIntensity  = MainWindow::ui->blueSlider->value() / 1000.0f;
+        m_BackGlow->m_depth          = MainWindow::ui->depthSlider->value();
+        m_BackGlow->process();
         timer->setInterval(1000 / MainWindow::ui->fpsSlider->value());
     }
 }
