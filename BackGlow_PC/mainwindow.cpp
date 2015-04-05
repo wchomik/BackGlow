@@ -114,11 +114,11 @@ void MainWindow::update()
     }
 
     if(ambipixel) {
-        ambipixel->brightnes      = MainWindow::ui->brightnessSlider->value() / 1000.0f;
-        ambipixel->redIntensity   = MainWindow::ui->redSlider->value() / 1000.0f;
-        ambipixel->greenIntensity = MainWindow::ui->greenSlider->value() / 1000.0f;
-        ambipixel->blueIntensity  = MainWindow::ui->blueSlider->value() / 1000.0f;
-        ambipixel->depth          = MainWindow::ui->depthSlider->value();
+        ambipixel->m_brightnes      = MainWindow::ui->brightnessSlider->value() / 1000.0f;
+        ambipixel->m_redIntensity   = MainWindow::ui->redSlider->value() / 1000.0f;
+        ambipixel->m_greenIntensity = MainWindow::ui->greenSlider->value() / 1000.0f;
+        ambipixel->m_blueIntensity  = MainWindow::ui->blueSlider->value() / 1000.0f;
+        ambipixel->m_depth          = MainWindow::ui->depthSlider->value();
         ambipixel->process();
         timer->setInterval(1000 / MainWindow::ui->fpsSlider->value());
     }

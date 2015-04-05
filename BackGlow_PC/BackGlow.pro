@@ -16,10 +16,14 @@ win32:LIBS += -lGdi32 -lUser32
 SOURCES += main.cpp\
         mainwindow.cpp \
     serial.cpp \
-    backglow.cpp
+    backglow.cpp \
+    screencapture.cpp \
+    screencapturewin.cpp
 
 HEADERS  += mainwindow.h \
     serial.h \
-    backglow.h
+    backglow.h \
+    screencapture.h \
+    screencapturewin.h
 
 FORMS    += mainwindow.ui

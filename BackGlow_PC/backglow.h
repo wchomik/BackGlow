@@ -1,31 +1,23 @@
 #ifndef AMBIENTPIXELS_H
 #define AMBIENTPIXELS_H
 
-#include <Windows.h>
-#include <wingdi.h>
 #include <QtSerialPort/QSerialPort>
+
+#ifdef _WIN32
+#include "screencapturewin.h"
+#define SCREEN_CAP ScreenCaptureWin
+#endif
 
 #include "serial.h"
 
 class BackGlow
 {
 private:
-    Serial* SP;
+    Serial* m_Serial;
+    SCREEN_CAP m_ScreenCap;
 
-    inline int PosB(int x, int y)
-    {
-        return ScreenData[4 * ((y*ScreenX) + x)];
-    }
-
-    inline int PosG(int x, int y)
-    {
-        return ScreenData[4 * ((y*ScreenX) + x) + 1];
-    }
-
-    inline int PosR(int x, int y)
-    {
-        return ScreenData[4 * ((y*ScreenX) + x) + 2];
-    }
+    int m_ScreenWidth;
+    int m_ScreenHeight;
 
 public:
     BackGlow(const char *port);
@@ -33,20 +25,12 @@ public:
 
     void process();
 
-
-    int leds  = 30;
-    int depth = 50;
-    float brightnes = 0.7f;
-    float redIntensity   = 1.0f;
-    float greenIntensity = 1.0f;
-    float blueIntensity  = 1.0f;
-
-    int ScreenX = 0;
-    int ScreenY = 0;
-    BYTE* ScreenData = 0;
-
-    HDC hdcScreen;
-    HDC hdcMem;
+    int   m_leds           = 30;
+    int   m_depth          = 50;
+    float m_brightnes      = 0.7f;
+    float m_redIntensity   = 1.0f;
+    float m_greenIntensity = 1.0f;
+    float m_blueIntensity  = 1.0f;
 };
 
 #endif // AMBIENTPIXELS_H

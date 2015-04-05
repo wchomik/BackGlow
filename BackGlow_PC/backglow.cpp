@@ -3,19 +3,11 @@
 
 BackGlow::BackGlow(const char * port)
 {
-    hdcScreen = GetDC(NULL);
-    hdcMem    = CreateCompatibleDC(hdcScreen);
+    m_ScreenWidth  = m_ScreenCap.getWidth();
+    m_ScreenHeight = m_ScreenCap.getHeight();
 
-    ScreenX = GetDeviceCaps(hdcScreen, HORZRES);
-    ScreenY = GetDeviceCaps(hdcScreen, VERTRES);
-
-    if (ScreenData)
-        free(ScreenData);
-    ScreenData = (BYTE*)malloc(4 * ScreenX * ScreenY);
-    memset(ScreenData, 0, 4 * ScreenX * ScreenY);
-
-    SP = new Serial(port);
-    if (SP->isReady()) {
+    m_Serial = new Serial(port);
+    if (m_Serial->isReady()) {
         printf("Connected to serial port\n");
     } else {
         printf("Cannot connect to serial port!");
@@ -27,18 +19,15 @@ BackGlow::~BackGlow()
     unsigned char buffer[1024];
     int i = 0;
     memset(buffer, 0, 1024);
-    buffer[i++] = (unsigned char)(leds * 3 + 1);
-    for (int led = leds - 1; led >= 0; led--) {
+    buffer[i++] = (unsigned char)(m_leds * 3 + 1);
+    for (int led = m_leds - 1; led >= 0; led--) {
         buffer[i++] = 0;
         buffer[i++] = 0;
         buffer[i++] = 0;
     }
-    SP->write((char *)buffer, i);
+    m_Serial->write((char *)buffer, i);
 
-    delete SP;
-    free(ScreenData);
-    ReleaseDC(NULL, hdcScreen);
-    DeleteDC(hdcMem);
+    delete m_Serial;
 }
 
 void BackGlow::process()
@@ -52,43 +41,27 @@ void BackGlow::process()
         tableDone = true;
     }
 
-    HBITMAP hBitmap = CreateCompatibleBitmap(hdcScreen, ScreenX, ScreenY);
-    HGDIOBJ hOld    = SelectObject(hdcMem, hBitmap);
-    BitBlt(hdcMem, 0, 0, ScreenX, ScreenY, hdcScreen, 0, 0, SRCCOPY);
-    SelectObject(hdcMem, hOld);
-
-    BITMAPINFOHEADER bmi = { 0 };
-    bmi.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.biPlanes = 1;
-    bmi.biBitCount = 32;
-    bmi.biWidth = ScreenX;
-    bmi.biHeight = -ScreenY;
-    bmi.biCompression = BI_RGB;
-    bmi.biSizeImage = 0;// 3 * ScreenX * ScreenY;
-
-    GetDIBits(hdcMem, hBitmap, 0, ScreenY, ScreenData, (BITMAPINFO*)&bmi, DIB_RGB_COLORS);
-
-    DeleteObject(hBitmap);
+    m_ScreenCap.capture();
 
     unsigned char buffer[1024];
     int i = 0;
     memset(buffer, 0, 1024);
-    buffer[i++] = (unsigned char)(leds * 3 + 1);
-    for (int led = leds - 1; led >= 0; led--) {
+    buffer[i++] = (unsigned char)(m_leds * 3 + 1);
+    for (int led = m_leds - 1; led >= 0; led--) {
         int nextLed = led + 1;
-        int nextX = nextLed * (ScreenX / leds);
+        int nextX = nextLed * (m_ScreenWidth / m_leds);
         float r = 0, g = 0, b = 0;
-        for (int x = led * (ScreenX / leds); x < nextX; x++) {
-            for (int y = 0; y < depth; y++){
-                r += gammaTable[PosR(x, y)];
-                g += gammaTable[PosG(x, y)],
-                b += gammaTable[PosB(x, y)];
+        for (int x = led * (m_ScreenWidth / m_leds); x < nextX; x++) {
+            for (int y = 0; y < m_depth; y++){
+                r += gammaTable[m_ScreenCap.getRed(x, y)];
+                g += gammaTable[m_ScreenCap.getGreen(x, y)],
+                b += gammaTable[m_ScreenCap.getBlue(x, y)];
             }
         }
-        buffer[i++] = (unsigned char)((r / ((ScreenX / leds) * depth)) * brightnes * redIntensity);
-        buffer[i++] = (unsigned char)((g / ((ScreenX / leds) * depth)) * brightnes * greenIntensity);
-        buffer[i++] = (unsigned char)((b / ((ScreenX / leds) * depth)) * brightnes * blueIntensity);
+        buffer[i++] = (unsigned char)((r / ((m_ScreenWidth / m_leds) * m_depth)) * m_brightnes * m_redIntensity);
+        buffer[i++] = (unsigned char)((g / ((m_ScreenWidth / m_leds) * m_depth)) * m_brightnes * m_greenIntensity);
+        buffer[i++] = (unsigned char)((b / ((m_ScreenWidth / m_leds) * m_depth)) * m_brightnes * m_blueIntensity);
     }
 
-    SP->write((char *)buffer, i);
+    m_Serial->write((char *)buffer, i);
 }
