@@ -1,7 +1,7 @@
 #include "backglow.h"
 #include <cmath>
 
-BackGlow::BackGlow(const char * port) :
+BackGlow::BackGlow(QString port) :
     m_Serial(port)
 {
     m_ScreenWidth  = m_ScreenCap.getWidth();

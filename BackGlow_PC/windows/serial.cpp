@@ -1,9 +1,9 @@
 #include "serial.h"
 
-Serial::Serial(const char *portName)
+Serial::Serial(QString portName)
 {
     this->connected    = false;
-    this->serialHandle = CreateFile(reinterpret_cast<LPCWSTR>(portName),
+    this->serialHandle = CreateFile(reinterpret_cast<LPCWSTR>(portName.utf16()),
         GENERIC_READ | GENERIC_WRITE,
         0,
         NULL,

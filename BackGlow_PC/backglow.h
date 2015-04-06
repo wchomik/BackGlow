@@ -2,6 +2,7 @@
 #define AMBIENTPIXELS_H
 
 #include <QtSerialPort/QSerialPort>
+#include <QString>
 
 #include "serial_.h"
 #include "screencapture_.h"
@@ -16,7 +17,7 @@ private:
     int m_ScreenHeight;
 
 public:
-    BackGlow(const char *port);
+    BackGlow(QString port);
     ~BackGlow();
 
     void process();

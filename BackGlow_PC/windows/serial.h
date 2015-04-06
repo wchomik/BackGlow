@@ -1,7 +1,7 @@
 #ifndef SERIAL_H
 #define SERIAL_H
 
-#include "serial.h"
+#include <QString>
 
 #include <windows.h>
 #include <stdio.h>
@@ -14,7 +14,7 @@ private:
     bool    connected;
 
 public:
-    Serial(const char *portName);
+    Serial(QString portName);
     virtual ~Serial();
 
     virtual int  read (char *buffer, unsigned int nbChar);

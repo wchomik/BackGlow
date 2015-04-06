@@ -53,9 +53,9 @@ void Serial::configure(int speed, int parity, bool blocking){
     isOk = true;
 }
 
-Serial::Serial(const char *portName){
+Serial::Serial(QString portName){
     char name[256] = "/dev/";
-    strcpy(name + 5, portName);
+    strcpy(name + 5, portName.toUtf8());
     fd = open(name, O_RDWR | O_NOCTTY | O_SYNC);
     if(fd == 0) {
         fprintf(stderr, "%s", "Unable to open port.\n");

@@ -94,7 +94,7 @@ void MainWindow::engage() {
             qDebug() << "Unknown serial port!";
             return;
         }
-        m_BackGlow = new BackGlow((const char *)(list[index].portName().toUtf8()));
+        m_BackGlow = new BackGlow(list[index].portName());
 
         MainWindow::ui->runPushButton->setText("Disengage");
     }

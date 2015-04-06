@@ -1,8 +1,7 @@
 #ifndef SERIALLINUX
 #define SERIALLINUX
 
-#ifdef __unix
-#include "serial.h"
+#include <QString>
 
 class Serial
 {
@@ -11,15 +10,12 @@ private:
     void configure(int speed, int parity, bool blocking);
     bool isOk;
 public:
-    Serial(const char* portName);
+    Serial(QString portName);
     ~Serial();
     int read (char *buffer, unsigned int nbChar);
     int write(char *buffer, unsigned int nbChar);
     bool isReady(){ return isOk; }
 };
 
-#define SERIAL_CLASS SerialLinux
-
-#endif
 #endif // SERIALLINUX
 
