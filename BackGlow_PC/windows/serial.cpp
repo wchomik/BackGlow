@@ -1,5 +1,5 @@
-#include "serialwin.h"
-/*
+#include "serial.h"
+
 Serial::Serial(const char *portName)
 {
     this->connected    = false;
@@ -70,7 +70,7 @@ int Serial::read(char *buffer, unsigned int nbChar)
 }
 
 
-bool Serial::write(char *buffer, unsigned int nbChar)
+int Serial::write(char *buffer, unsigned int nbChar)
 {
     DWORD     bytesSend;
     DWORD     errors;
@@ -78,14 +78,13 @@ bool Serial::write(char *buffer, unsigned int nbChar)
 
     if (!WriteFile(this->serialHandle, (void *)buffer, nbChar, &bytesSend, 0)) {
         ClearCommError(this->serialHandle, &errors, &status);
-        return false;
+        return -1;
     }
 
-    return true;
+    return bytesSend;
 }
 
 bool Serial::isReady()
 {
     return this->connected;
 }
-*/

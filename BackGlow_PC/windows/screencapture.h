@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <wingdi.h>
 
-#include "screencapture.h"
+#include "../screencapture_.h"
 
 class ScreenCapture : public ScreenCapture_
 {
@@ -13,8 +13,8 @@ private:
     HDC m_hdcMem;
 
 public:
-    ScreenCaptureWin();
-    virtual ~ScreenCaptureWin();
+    ScreenCapture();
+    virtual ~ScreenCapture();
 
     void capture();
 };

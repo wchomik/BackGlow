@@ -1,6 +1,6 @@
-#include "screencapturewin.h"
+#include "screencapture.h"
 
-ScreenCaptureWin::ScreenCaptureWin()
+ScreenCapture::ScreenCapture()
 {
     m_hdcScreen    = GetDC(NULL);
     m_hdcMem       = CreateCompatibleDC(m_hdcScreen);
@@ -13,14 +13,14 @@ ScreenCaptureWin::ScreenCaptureWin()
     memset(m_ScreenData, 0, 4 * m_ScreenWidth * m_ScreenHeight);
 }
 
-ScreenCaptureWin::~ScreenCaptureWin()
+ScreenCapture::~ScreenCapture()
 {
     free(m_ScreenData);
     ReleaseDC(NULL, m_hdcScreen);
     DeleteDC(m_hdcMem);
 }
 
-void ScreenCaptureWin::capture()
+void ScreenCapture::capture()
 {
     HBITMAP hBitmap = CreateCompatibleBitmap(m_hdcScreen, m_ScreenWidth, m_ScreenHeight);
     HGDIOBJ hOld    = SelectObject(m_hdcMem, hBitmap);
