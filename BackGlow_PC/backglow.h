@@ -3,18 +3,14 @@
 
 #include <QtSerialPort/QSerialPort>
 
-#ifdef _WIN32
-#include "screencapturewin.h"
-#define SCREEN_CAP ScreenCaptureWin
-#endif
-
-#include "serial.h"
+#include "serial_.h"
+#include "screencapture_.h"
 
 class BackGlow
 {
 private:
-    Serial* m_Serial;
-    SCREEN_CAP m_ScreenCap;
+    Serial m_Serial;
+    ScreenCapture m_ScreenCap;
 
     int m_ScreenWidth;
     int m_ScreenHeight;

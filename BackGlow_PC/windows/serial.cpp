@@ -1,5 +1,5 @@
-#include "serial.h"
-
+#include "serialwin.h"
+/*
 Serial::Serial(const char *portName)
 {
     this->connected    = false;
@@ -88,3 +88,4 @@ bool Serial::isReady()
 {
     return this->connected;
 }
+*/

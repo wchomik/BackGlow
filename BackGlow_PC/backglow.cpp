@@ -1,13 +1,13 @@
 #include "backglow.h"
 #include <cmath>
 
-BackGlow::BackGlow(const char * port)
+BackGlow::BackGlow(const char * port) :
+    m_Serial(port)
 {
     m_ScreenWidth  = m_ScreenCap.getWidth();
     m_ScreenHeight = m_ScreenCap.getHeight();
 
-    m_Serial = new Serial(port);
-    if (m_Serial->isReady()) {
+    if (m_Serial.isReady()) {
         printf("Connected to serial port\n");
     } else {
         printf("Cannot connect to serial port!");
@@ -25,9 +25,7 @@ BackGlow::~BackGlow()
         buffer[i++] = 0;
         buffer[i++] = 0;
     }
-    m_Serial->write((char *)buffer, i);
-
-    delete m_Serial;
+    m_Serial.write((char *)buffer, i);
 }
 
 void BackGlow::process()
@@ -63,5 +61,5 @@ void BackGlow::process()
         buffer[i++] = (unsigned char)((b / ((m_ScreenWidth / m_leds) * m_depth)) * m_brightnes * m_blueIntensity);
     }
 
-    m_Serial->write((char *)buffer, i);
+    m_Serial.write((char *)buffer, i);
 }

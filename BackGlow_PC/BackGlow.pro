@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui serialport
+QT       += core gui serialport widgets
 
 greaterThan(QT_MAJOR_VERSION, 5): QT += widgets
 
@@ -12,18 +12,31 @@ TARGET = BackGlow
 TEMPLATE = app
 
 win32:LIBS += -lGdi32 -lUser32
+unix:!macx:LIBS += -lX11
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    serial.cpp \
-    backglow.cpp \
-    screencapture.cpp \
-    screencapturewin.cpp
+QMAKE_CXXFLAGS += -std=c++11
+
+SOURCES +=  main.cpp\
+            mainwindow.cpp \
+            backglow.cpp \
+            screencapture_.cpp
+
+win32:SOURCES +=    windows/screencapture.cpp \
+                    windows/serial.cpp
+unix:!macx:SOURCES += linux/screencapture.cpp \
+                      linux/serial.cpp
+
 
 HEADERS  += mainwindow.h \
-    serial.h \
-    backglow.h \
-    screencapture.h \
-    screencapturewin.h
+            backglow.h \
+            screencapture_.h \
+            serial_.h
+
+
+win32:HEADERS +=    windows/screencapture.h \
+                    windows/serial.h
+unix:!macx:HEADERS += linux/screencapture.h \
+                      linux/serial.h
 
 FORMS    += mainwindow.ui
+

@@ -1,6 +1,8 @@
 #ifndef SERIAL_H
 #define SERIAL_H
 
+#include "serial.h"
+
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,11 +15,11 @@ private:
 
 public:
     Serial(const char *portName);
-    ~Serial();
+    virtual ~Serial();
 
-    int  read (char *buffer, unsigned int nbChar);
-    bool write(char *buffer, unsigned int nbChar);
-    bool isReady();
+    virtual int  read (char *buffer, unsigned int nbChar);
+    virtual int write(char *buffer, unsigned int nbChar);
+    virtual bool isReady();
 };
 
 #endif // SERIAL_H

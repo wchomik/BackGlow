@@ -1,11 +1,12 @@
 #ifndef SCREENCAPTUREWIN_H
 #define SCREENCAPTUREWIN_H
+
 #include <Windows.h>
 #include <wingdi.h>
 
 #include "screencapture.h"
 
-class ScreenCaptureWin : public ScreenCapture
+class ScreenCapture : public ScreenCapture_
 {
 private:
     HDC m_hdcScreen;
@@ -13,9 +14,9 @@ private:
 
 public:
     ScreenCaptureWin();
-    ~ScreenCaptureWin();
+    virtual ~ScreenCaptureWin();
 
-    virtual void capture();
+    void capture();
 };
 
 #endif // SCREENCAPTUREWIN_H

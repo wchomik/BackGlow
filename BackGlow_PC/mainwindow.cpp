@@ -1,8 +1,11 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include <QSettings>
 #include <QtGlobal>
 #include <QDebug>
+
+
+#include "ui_mainwindow.h"
+
+#include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -91,7 +94,7 @@ void MainWindow::engage() {
             qDebug() << "Unknown serial port!";
             return;
         }
-        m_BackGlow = new BackGlow((const char *)(list[index].portName().utf16()));
+        m_BackGlow = new BackGlow((const char *)(list[index].portName().toUtf8()));
 
         MainWindow::ui->runPushButton->setText("Disengage");
     }
