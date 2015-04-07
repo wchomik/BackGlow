@@ -106,11 +106,11 @@ void MainWindow::update()
     if(!running)
         return;
 
-    if(frames == 10) {
+    if(frames == 60) {
         frames = 0;
         int this_time = time.elapsed();
         if(this_time != last_time) {
-            MainWindow::ui->counterLcdNumber->display(10000/(this_time - last_time));
+            MainWindow::ui->counterLcdNumber->display(60000/(this_time - last_time));
         } else {
             MainWindow::ui->counterLcdNumber->display(-1);
         }
@@ -126,6 +126,6 @@ void MainWindow::update()
         m_BackGlow->m_blueIntensity  = MainWindow::ui->blueSlider->value() / 1000.0f;
         m_BackGlow->m_depth          = MainWindow::ui->depthSlider->value();
         m_BackGlow->process();
-        timer->setInterval(1000 / MainWindow::ui->fpsSlider->value());
+        timer->setInterval(0);//1000 / MainWindow::ui->fpsSlider->value());
     }
 }

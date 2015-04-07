@@ -15,7 +15,7 @@ private:
 
     int m_ScreenWidth;
     int m_ScreenHeight;
-
+    static const int MAXLEDS = 30;
 public:
     BackGlow(QString port);
     ~BackGlow();
