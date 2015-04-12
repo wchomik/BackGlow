@@ -18,6 +18,8 @@ public:
     int getBlue(int x, int y);
     int getGreen(int x, int y);
     int getRed(int x, int y);
+
+	unsigned char * getData(){ return m_ScreenData; }
 };
 
 #ifdef WIN32

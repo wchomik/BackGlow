@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 5): QT += widgets
 TARGET = BackGlow
 TEMPLATE = app
 
+INCLUDEPATH += "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.0\include"
+
 win32:LIBS += -lGdi32 -lUser32
 unix:!macx:LIBS += -lX11
 
@@ -40,3 +42,6 @@ unix:!macx:HEADERS += linux/screencapture.h \
 
 FORMS    += mainwindow.ui
 
+
+
+win32:LIBS += -L"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.0/lib/x64/" -lOpenCL
